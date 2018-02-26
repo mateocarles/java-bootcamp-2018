@@ -1,4 +1,6 @@
-package com.model;
+package com.dao;
+
+import com.db.ConnectionJDBC;
 
 import java.sql.*;
 

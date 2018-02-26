@@ -1,4 +1,4 @@
-package com.model;
+package com.db;
 
 import java.sql.*;
 import java.sql.SQLException;
@@ -7,15 +7,10 @@ public class ConnectionJDBC {
 
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/mydb?useSSL=false";
     private static final String JDBC_USER = "root";
-    private static final String JDBC_PASS = "admin";
-
-    String url = "jdbc:mysql://localhost:3306/dbprueba?useSSL=false";
-    String uname = "root";
-    String pass = "admin";
+    private static final String JDBC_PASS = "root";
 
     public static synchronized Connection getConnection() throws SQLException {
-
-
+        
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (Exception e){
@@ -23,12 +18,7 @@ public class ConnectionJDBC {
             e.printStackTrace();
         }
 
-
-        Connection con =  DriverManager.getConnection(JDBC_URL,JDBC_USER,JDBC_PASS);
-
-        return con;
-
-
+        return DriverManager.getConnection(JDBC_URL,JDBC_USER,JDBC_PASS);
     }
 
     public static void close(ResultSet rs) {
@@ -40,7 +30,6 @@ public class ConnectionJDBC {
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
-
 
     }
 

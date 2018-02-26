@@ -1,4 +1,6 @@
-package com.model;
+package com.dto;
+
+import com.model.Payment;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
