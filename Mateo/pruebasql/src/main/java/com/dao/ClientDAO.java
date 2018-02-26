@@ -1,4 +1,7 @@
-package com.model;
+package com.dao;
+
+import com.dto.ClientDTO;
+import com.db.ConnectionJDBC;
 
 import java.util.*;
 import java.sql.*;
@@ -6,23 +9,23 @@ import java.sql.*;
 
 public class ClientDAO {
 
-    private final String SQL_INSERT = "INSERT INTO client(Name,LastName,Description) VALUES(?,?,?)";
-    private final String SQL_UPDATE = "UPDATE client SET Name=?, LastName=?, Description=? WHERE idClient=?";
-    private final String SQL_DELETE = "DELETE FROM client WHERE idClient=?";
-    private final String SQL_SELECT = "SELECT * FROM client WHERE idClient=?";
-    private final String SQL_SELECTALL = "SELECT * FROM client";
+    private static final String SQL_INSERT = "INSERT INTO client(firstName,lastName,description) VALUES(?,?,?)";
+    private static final String SQL_UPDATE = "UPDATE client SET firstName = ?, lastName = ?, description = ? WHERE idClient= ?";
+    private static final String SQL_DELETE = "DELETE FROM client WHERE idClient = ?";
+    private static final String SQL_SELECT = "SELECT * FROM client WHERE idClient = ?";
+    private static final String SQL_SELECT_ALL = "SELECT * FROM client";
 
     public int insert(ClientDTO client) throws SQLException {
 
         Connection conn = ConnectionJDBC.getConnection();
-        int rows = 0;
+        int rows;
 
         PreparedStatement stmt = conn.prepareStatement(SQL_INSERT);
 
         int index = 1;
-        stmt.setString(index++,client.getName());
-        stmt.setString(index++, client.getLastName());
-        stmt.setString(index, client.getDescription());
+        stmt.setString(1,client.getName());
+        stmt.setString(2, client.getLastName());
+        stmt.setString(3, client.getDescription());
 
         System.out.println("Adding client to DB...");
 
@@ -132,7 +135,7 @@ public class ClientDAO {
         ArrayList<ClientDTO> clients = new ArrayList<ClientDTO>();
 
 
-        PreparedStatement stmt = conn.prepareStatement(SQL_SELECTALL);
+        PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_ALL);
         ResultSet rs = stmt.executeQuery();
 
 
