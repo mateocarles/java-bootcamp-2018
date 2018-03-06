@@ -1,13 +1,18 @@
 package com.globant.shoppingcartdemoapp.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.*;
 
 
-@Entity
 @Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name="CLIENT")
 public class Client {
 
 
@@ -16,12 +21,18 @@ public class Client {
     private int id;
     private String name;
     private String lastName;
-    private String desription;
+    private String description;
 
-    @OneToMany
-    private List<Payment> payments;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)//
+    private List<Payment> payment;
 
-    public Client() {
-        this.payments = new ArrayList<>();
+
+    public Client(String name, String lastName, String description) {
+        this.name = name;
+        this.lastName = lastName;
+        this.description = description;
     }
+
+
+
 }

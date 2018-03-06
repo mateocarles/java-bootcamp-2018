@@ -1,58 +1,63 @@
 package com.globant.shoppingcartdemoapp.controller;
 
 
+import com.globant.shoppingcartdemoapp.dto.OrderDTO;
 import com.globant.shoppingcartdemoapp.entities.Item;
-import com.globant.shoppingcartdemoapp.entities.Order;
+import com.globant.shoppingcartdemoapp.entities.ShoppingOrder;
 import com.globant.shoppingcartdemoapp.entities.Payment;
-import com.globant.shoppingcartdemoapp.service.*;
+import com.globant.shoppingcartdemoapp.service.impl.ItemServiceImpl;
+import com.globant.shoppingcartdemoapp.service.impl.OrderServiceImpl;
+import com.globant.shoppingcartdemoapp.service.impl.PaymentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.jaxb.SpringDataJaxb;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.globant.shoppingcartdemoapp.repository.*;
 
 import java.util.List;
 
 @RestController
 public class OrderController {
 
+
+    private final OrderServiceImpl orderServiceImpl;
+
     @Autowired
-    private OrderService orderService;
-    @Autowired
-    private ItemService itemService;
-    @Autowired
-    private PaymentService paymentService;
+    public OrderController(OrderServiceImpl orderServiceImpl) {
 
-
-    @RequestMapping(value="/client/{idClient}/payment/{idPayment}/order", method = RequestMethod.POST)
-    public void addOrder(@RequestBody Order order, @PathVariable int idPayment) {
-        Payment p = paymentService.getPayment(idPayment);
-        p.setOrder(order);
-        orderService.addOrder(order);
+        this.orderServiceImpl = orderServiceImpl;
     }
 
-    @RequestMapping(value="/client/{idClient}/payment/{idPayment}/order/{idOrder}/item/{idItem}",method = RequestMethod.POST)
 
-    public void addItemToOrder(@PathVariable int idOrder, @PathVariable int idItem) {
+    @RequestMapping(value="/order", method = RequestMethod.POST)
+    public ResponseEntity<OrderDTO> addOrder(@RequestParam(name = "itemIds") List<Integer> itemIds) {
 
-       Item i = itemService.getItem(idItem);
-       Order o = orderService.getOrder(idOrder);
-
-       o.getItems().add(i);
+        final OrderDTO orderDTO = new OrderDTO(itemIds);
+        orderServiceImpl.addOrder(orderDTO);
+        return new ResponseEntity<>(orderDTO, HttpStatus.CREATED);
 
     }
 
-    @RequestMapping(value="client/{idClient}/payment/{idPayment}/order/{orderId}",method = RequestMethod.GET)
-    public Order getOrder(@PathVariable int orderId) {
-        return orderService.getOrder(orderId);
+
+    @RequestMapping(value="/order",method = RequestMethod.GET)
+    public ResponseEntity<ShoppingOrder> getOrder(@PathVariable int orderId) {
+
+        final ShoppingOrder order = orderServiceImpl.getOrder(orderId);
+        return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
-    @RequestMapping(value="client/{idClient}/payment/{idPayment}/order",method = RequestMethod.PUT)
-    public void updateOrder(@PathVariable Order order) {
-        orderService.updateOrder(order);
+    @RequestMapping(value="/order",method = RequestMethod.PUT)
+    public ResponseEntity<OrderDTO> updateOrder(@RequestParam(name = "orderId") int orderId,
+                                                @RequestParam(name = "itemIds") List<Integer> itemIds) {
+
+        final OrderDTO orderDTO = new OrderDTO(itemIds);
+        orderServiceImpl.updateOrder(orderDTO,orderId);
+        return new ResponseEntity<>(orderDTO, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value="client/{idClient}/payment/{idPayment}/order/{orderId}",method = RequestMethod.DELETE)
-    public void deleteOrder(@PathVariable int orderId) {
-        orderService.deleteOrder(orderId);
+    @RequestMapping(value="/order",method = RequestMethod.DELETE)
+    public void deleteOrder(@RequestParam(name = "orderId") int orderId) {
+        orderServiceImpl.deleteOrder(orderId);
     }
 
 

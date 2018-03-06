@@ -1,61 +1,67 @@
 package com.globant.shoppingcartdemoapp.controller;
-import com.globant.shoppingcartdemoapp.service.*;
+import com.globant.shoppingcartdemoapp.dto.PaymentDTO;
 import com.globant.shoppingcartdemoapp.entities.*;
 import java.util.*;
 
+import com.globant.shoppingcartdemoapp.service.impl.ClientServiceImpl;
+import com.globant.shoppingcartdemoapp.service.impl.PaymentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PaymentController {
 
-    @Autowired
-    private PaymentService paymentService;
+    private final PaymentServiceImpl paymentServiceImpl;
+
 
     @Autowired
-    private ClientService clientService;
-
-    @RequestMapping(value="/client/{clientId}/payment",method = RequestMethod.POST)
-    public void addPayment(@RequestBody Payment payment, @PathVariable int clientId) {
-        Client c = clientService.getClient(clientId);
-        c.getPayments().add(payment);
-        payment.setClient(c);
-
-        paymentService.add(payment);
+    public PaymentController(PaymentServiceImpl paymentService) {
+        this.paymentServiceImpl = paymentService;
     }
 
-    @RequestMapping(value="/client/{clientId}/payments", method = RequestMethod.GET)
-    public List<Payment> getAllPayments(@PathVariable int clientId) {
-        return paymentService.getAllPayments(clientId);
+    @RequestMapping(value="/payment",method = RequestMethod.POST)
+    public ResponseEntity<PaymentDTO> addPayment(@RequestParam(name = "orderId") int orderId,
+                                               @RequestParam(name = "amount") float amount) {
+
+        PaymentDTO paymentDTO = new PaymentDTO(orderId,amount);
+        paymentServiceImpl.add(paymentDTO);
+        return new ResponseEntity<>(paymentDTO, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value="/client/{clientId}/payment/{paymentId}",method = RequestMethod.GET)
-    public Payment getPayment(@PathVariable int paymentId) {
-        return paymentService.getPayment(paymentId);
+    @RequestMapping(value="/payments", method = RequestMethod.GET)
+    public ResponseEntity<List<Payment>> getAllPayments() {
+        List<Payment> paymentList = paymentServiceImpl.getAllPayments();
+        return new ResponseEntity<>(paymentList, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/client/{clientId}/payment",method = RequestMethod.PUT)
-    public void updatePayment(@RequestBody Payment payment, @PathVariable int clientId) {
-
-        Client c = clientService.getClient(clientId);
-        for(int i = 0 ; i < c.getPayments().size() ; i++) {
-            if(c.getPayments().get(i).getId() == clientId) {
-                c.getPayments().add(i,payment);
-            }
-        }
-        paymentService.updatePayment(payment);
+    @RequestMapping(value="/payments",method = RequestMethod.GET)
+    public ResponseEntity<List<Payment>> getPaymentsFromClient(@RequestParam(name = "clientId") int clientId) {
+        List<Payment> paymentList = paymentServiceImpl.getAllPaymentsFromClient(clientId);
+        return new ResponseEntity<>(paymentList,HttpStatus.OK);
     }
 
-    @RequestMapping(value="/client/{clientId}/payment/{paymentId}",method = RequestMethod.DELETE)
-    public void deletePayment(@PathVariable int paymentId, @PathVariable int clientId) {
+    @RequestMapping(value="/payment",method = RequestMethod.GET)
+    public ResponseEntity<Payment> getPayment(@RequestParam(name = "paymentId") int paymentId) {
+        Payment payment = paymentServiceImpl.getPayment(paymentId);
+        return new ResponseEntity<>(payment, HttpStatus.OK);
+    }
 
-        Client c = clientService.getClient(clientId);
-        for(int i = 0 ; i < c.getPayments().size() ; i++) {
-            if(c.getPayments().get(i).getId() == clientId) {
-                c.getPayments().remove(i);
-            }
-        }
-        paymentService.deletePayment(paymentId);
+    @RequestMapping(value="/payment",method = RequestMethod.POST)
+    public ResponseEntity<PaymentDTO> updatePayment(@RequestParam(name ="paymentId") int paymentId,
+                                                    @RequestParam(name = "orderId") int orderId,
+                                                    @RequestParam(name = "amount") float amount) {
+
+        PaymentDTO paymentDTO = new PaymentDTO(paymentId,orderId,amount);
+        paymentServiceImpl.updatePayment(paymentDTO);
+        return new ResponseEntity<>(paymentDTO, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value="/payment",method = RequestMethod.DELETE)
+    public void deletePayment(@RequestParam(name = "paymentId") int paymentId) {
+
+        paymentServiceImpl.deletePayment(paymentId);
     }
 
 }
