@@ -22,7 +22,6 @@ public class Client {
     private String name;
     private String lastName;
     private String description;
-<<<<<<< HEAD
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)//
     private List<Payment> payment;
@@ -32,18 +31,6 @@ public class Client {
         this.name = name;
         this.lastName = lastName;
         this.description = description;
-=======
-
-    @OneToMany( cascade = CascadeType.ALL)
-    private List<Payment> payment;
-
-    public Client() {
-        this.payment = new ArrayList<>();
-    }
-
-    public String toString() {
-        return "";
->>>>>>> a79fd91506e4ab4e94c9ee68fad557592b1df6a2
     }
 
 

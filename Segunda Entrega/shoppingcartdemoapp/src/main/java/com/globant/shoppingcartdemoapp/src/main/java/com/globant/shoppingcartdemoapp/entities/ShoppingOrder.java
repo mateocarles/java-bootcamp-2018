@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.*;
+
 
 import javax.persistence.*;
 
@@ -13,23 +15,17 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="ITEM")
-public class Item {
+@Table(name="SHOPPING_ORDER")
+public class ShoppingOrder {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
-    private String name;
 
-<<<<<<< HEAD
-    @ManyToOne
-    @JoinColumn(name="SHOPPING_ORDER_ID")
-    private ShoppingOrder shoppingOrder;
-=======
-    @OneToOne
-    private ShoppingOrder shoppingOrder;
+
+    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Item> item;
 
 
 
->>>>>>> a79fd91506e4ab4e94c9ee68fad557592b1df6a2
 }

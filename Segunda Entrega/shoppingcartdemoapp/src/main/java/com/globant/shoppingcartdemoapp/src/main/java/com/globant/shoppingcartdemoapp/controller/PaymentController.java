@@ -21,7 +21,6 @@ public class PaymentController {
         this.paymentServiceImpl = paymentService;
     }
 
-<<<<<<< HEAD
     @RequestMapping(value="/payment",method = RequestMethod.POST)
     public ResponseEntity<PaymentDTO> addPayment(@RequestParam(name = "orderId") int orderId,
                                                @RequestParam(name = "amount") float amount) {
@@ -30,13 +29,6 @@ public class PaymentController {
         paymentServiceImpl.add(paymentDTO);
         return new ResponseEntity<>(paymentDTO, HttpStatus.CREATED);
     }
-=======
-    @RequestMapping(value="/client/{clientId}/payment",method = RequestMethod.POST)
-    public void addPayment(@RequestBody Payment payment, @PathVariable int clientId) {
-        Client c = clientService.getClient(clientId);
-        c.getPayment().add(payment);
-        payment.setClient(c);
->>>>>>> a79fd91506e4ab4e94c9ee68fad557592b1df6a2
 
     @RequestMapping(value="/payments", method = RequestMethod.GET)
     public ResponseEntity<List<Payment>> getAllPayments() {
@@ -61,35 +53,15 @@ public class PaymentController {
                                                     @RequestParam(name = "orderId") int orderId,
                                                     @RequestParam(name = "amount") float amount) {
 
-<<<<<<< HEAD
         PaymentDTO paymentDTO = new PaymentDTO(paymentId,orderId,amount);
         paymentServiceImpl.updatePayment(paymentDTO);
         return new ResponseEntity<>(paymentDTO, HttpStatus.CREATED);
-=======
-        Client c = clientService.getClient(clientId);
-        for(int i = 0 ; i < c.getPayment().size() ; i++) {
-            if(c.getPayment().get(i).getId() == clientId) {
-                c.getPayment().add(i,payment);
-            }
-        }
-        paymentService.updatePayment(payment);
->>>>>>> a79fd91506e4ab4e94c9ee68fad557592b1df6a2
     }
 
     @RequestMapping(value="/payment",method = RequestMethod.DELETE)
     public void deletePayment(@RequestParam(name = "paymentId") int paymentId) {
 
-<<<<<<< HEAD
         paymentServiceImpl.deletePayment(paymentId);
-=======
-        Client c = clientService.getClient(clientId);
-        for(int i = 0 ; i < c.getPayment().size() ; i++) {
-            if(c.getPayment().get(i).getId() == clientId) {
-                c.getPayment().remove(i);
-            }
-        }
-        paymentService.deletePayment(paymentId);
->>>>>>> a79fd91506e4ab4e94c9ee68fad557592b1df6a2
     }
 
 }
