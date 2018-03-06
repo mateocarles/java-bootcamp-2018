@@ -2,15 +2,19 @@ package com.globant.shoppingcartdemoapp.dto;
 
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClientDTO {
 
-
-    private int clientId;
 
     private String name;
 
@@ -18,6 +22,6 @@ public class ClientDTO {
 
     private String description;
 
-    private List<String> paymentIds;
+
 
 }

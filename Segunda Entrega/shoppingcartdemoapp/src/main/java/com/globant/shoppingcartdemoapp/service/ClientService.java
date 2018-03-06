@@ -1,12 +1,13 @@
 package com.globant.shoppingcartdemoapp.service;
 
+import com.globant.shoppingcartdemoapp.dto.ClientDTO;
 import com.globant.shoppingcartdemoapp.entities.Client;
 
 import java.util.List;
 
 public interface ClientService {
 
-    void addClient(Client client);
+    void addClient(ClientDTO clientDTO) ;
     List<Client> getAllClients();
     Client getClient(int id);
     void updateClient(Client client);

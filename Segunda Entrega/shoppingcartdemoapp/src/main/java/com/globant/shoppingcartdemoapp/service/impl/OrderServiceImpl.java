@@ -4,6 +4,7 @@ package com.globant.shoppingcartdemoapp.service.impl;
 import com.globant.shoppingcartdemoapp.dto.OrderDTO;
 import com.globant.shoppingcartdemoapp.entities.Item;
 import com.globant.shoppingcartdemoapp.entities.ShoppingOrder;
+import com.globant.shoppingcartdemoapp.repository.ItemRepository;
 import com.globant.shoppingcartdemoapp.repository.OrderRepository;
 import com.globant.shoppingcartdemoapp.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,25 +18,22 @@ public class OrderServiceImpl implements OrderService{
 
 
     private final OrderRepository orderRepository;
+    private final ItemRepository itemRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository,  ItemRepository itemRepository) {
         this.orderRepository = orderRepository;
+        this.itemRepository = itemRepository;
     }
 
-    public void addOrder(OrderDTO orderDTO) {
+    public ShoppingOrder addOrder(OrderDTO orderDTO) {
 
-        List<Integer> itemIds = orderDTO.getItemIds();
-        ShoppingOrder shoppingOrder = new ShoppingOrder();
-
+        List<Item> items = itemRepository.findAll(orderDTO.getItemIds());
+        ShoppingOrder order = ShoppingOrder.builder()
+                .items(items)
+                .build();
         //Set the items ids to the item List of ShoppingOrder entity
-        for(int i = 0 ; i < itemIds.size() ; i++) {
-            Item it = new Item();
-            it.setId(itemIds.get(i));
-            shoppingOrder.getItem().add(i,it);
-        }
-
-        orderRepository.save(shoppingOrder);
+        return orderRepository.save(order);
     }
 
     public ShoppingOrder getOrder(int orderId) {
@@ -51,7 +49,7 @@ public class OrderServiceImpl implements OrderService{
         for(int i = 0 ; i < itemIds.size() ; i++) {
             Item it = new Item();
             it.setId(itemIds.get(i));
-            shoppingOrder.getItem().add(i,it);
+            shoppingOrder.getItems().add(i,it);
         }
 
         orderRepository.save(shoppingOrder);

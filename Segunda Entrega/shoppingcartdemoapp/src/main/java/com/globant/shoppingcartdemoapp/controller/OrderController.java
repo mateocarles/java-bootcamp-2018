@@ -5,6 +5,7 @@ import com.globant.shoppingcartdemoapp.dto.OrderDTO;
 import com.globant.shoppingcartdemoapp.entities.Item;
 import com.globant.shoppingcartdemoapp.entities.ShoppingOrder;
 import com.globant.shoppingcartdemoapp.entities.Payment;
+import com.globant.shoppingcartdemoapp.service.OrderService;
 import com.globant.shoppingcartdemoapp.service.impl.ItemServiceImpl;
 import com.globant.shoppingcartdemoapp.service.impl.OrderServiceImpl;
 import com.globant.shoppingcartdemoapp.service.impl.PaymentServiceImpl;
@@ -13,50 +14,49 @@ import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-<<<<<<< HEAD
 
 import java.util.List;
-=======
->>>>>>> a79fd91506e4ab4e94c9ee68fad557592b1df6a2
+import java.util.stream.Collectors;
 
 @RestController
 public class OrderController {
 
 
-    private final OrderServiceImpl orderServiceImpl;
+    private final OrderService orderService;
 
-<<<<<<< HEAD
     @Autowired
     public OrderController(OrderServiceImpl orderServiceImpl) {
-=======
-    @RequestMapping(value="/client/{idClient}/payment/{idPayment}/orders", method = RequestMethod.POST)
-    public void addOrder(@RequestBody ShoppingOrder shoppingOrder, @PathVariable int idPayment) {
-        Payment p = paymentService.getPayment(idPayment);
-        p.setShoppingOrder(shoppingOrder);
-        orderService.addOrder(shoppingOrder);
 
-    }
->>>>>>> a79fd91506e4ab4e94c9ee68fad557592b1df6a2
-
-        this.orderServiceImpl = orderServiceImpl;
+        this.orderService = orderServiceImpl;
     }
 
 
-<<<<<<< HEAD
     @RequestMapping(value="/order", method = RequestMethod.POST)
     public ResponseEntity<OrderDTO> addOrder(@RequestParam(name = "itemIds") List<Integer> itemIds) {
 
-        final OrderDTO orderDTO = new OrderDTO(itemIds);
-        orderServiceImpl.addOrder(orderDTO);
-        return new ResponseEntity<>(orderDTO, HttpStatus.CREATED);
+        final OrderDTO orderDTO = OrderDTO.builder()
+                .itemIds(itemIds)
+                .build();
+        ShoppingOrder order = orderService.addOrder(orderDTO);
+
+        List<Integer> itemIds1 = order.getItems().stream()
+                .map(Item::getId)
+                .collect(Collectors.toList());
+
+        OrderDTO orderDTO1 = OrderDTO.builder()
+                .id(order.getId())
+                .itemIds(itemIds1)
+                .build();
+
+        return new ResponseEntity<>(orderDTO1, HttpStatus.CREATED);
 
     }
 
 
     @RequestMapping(value="/order",method = RequestMethod.GET)
-    public ResponseEntity<ShoppingOrder> getOrder(@PathVariable int orderId) {
+    public ResponseEntity<ShoppingOrder> getOrder(@RequestParam(name ="orderId") int orderId) {
 
-        final ShoppingOrder order = orderServiceImpl.getOrder(orderId);
+        final ShoppingOrder order = orderService.getOrder(orderId);
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
@@ -64,31 +64,16 @@ public class OrderController {
     public ResponseEntity<OrderDTO> updateOrder(@RequestParam(name = "orderId") int orderId,
                                                 @RequestParam(name = "itemIds") List<Integer> itemIds) {
 
-        final OrderDTO orderDTO = new OrderDTO(itemIds);
-        orderServiceImpl.updateOrder(orderDTO,orderId);
+        final OrderDTO orderDTO = OrderDTO.builder()
+                .itemIds(itemIds)
+                .build();
+        orderService.updateOrder(orderDTO,orderId);
         return new ResponseEntity<>(orderDTO, HttpStatus.CREATED);
-=======
-       Item i = itemService.getItem(idItem);
-       ShoppingOrder o = orderService.getOrder(idOrder);
-
-       o.getItem().add(i);
-
-    }
-
-    @RequestMapping(value="client/{idClient}/payment/{idPayment}/order/{orderId}",method = RequestMethod.GET)
-    public ShoppingOrder getOrder(@PathVariable int orderId) {
-        return orderService.getOrder(orderId);
-    }
-
-    @RequestMapping(value="client/{idClient}/payment/{idPayment}/order",method = RequestMethod.PUT)
-    public void updateOrder(@PathVariable ShoppingOrder shoppingOrder) {
-        orderService.updateOrder(shoppingOrder);
->>>>>>> a79fd91506e4ab4e94c9ee68fad557592b1df6a2
     }
 
     @RequestMapping(value="/order",method = RequestMethod.DELETE)
     public void deleteOrder(@RequestParam(name = "orderId") int orderId) {
-        orderServiceImpl.deleteOrder(orderId);
+        orderService.deleteOrder(orderId);
     }
 
 

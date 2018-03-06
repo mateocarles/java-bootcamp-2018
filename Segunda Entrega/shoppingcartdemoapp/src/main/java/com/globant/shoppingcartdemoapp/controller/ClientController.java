@@ -1,5 +1,8 @@
 package com.globant.shoppingcartdemoapp.controller;
+import com.globant.shoppingcartdemoapp.dto.ClientDTO;
+import com.globant.shoppingcartdemoapp.dto.PaymentDTO;
 import com.globant.shoppingcartdemoapp.entities.Payment;
+import com.globant.shoppingcartdemoapp.service.ClientService;
 import com.globant.shoppingcartdemoapp.service.impl.ClientServiceImpl;
 import com.globant.shoppingcartdemoapp.entities.Client;
 import java.util.*;
@@ -13,28 +16,32 @@ import org.springframework.web.bind.annotation.*;
 public class ClientController {
 
 
-    private ClientServiceImpl clientServiceImpl;
+    private ClientService clientService;
 
     @Autowired
     private ClientController(ClientServiceImpl clientServiceImpl){
-        this.clientServiceImpl = clientServiceImpl;
+        this.clientService = clientServiceImpl;
     }
 
     @RequestMapping(value="/client",method= RequestMethod.POST)
-    public ResponseEntity<Client> addClient(@RequestParam(name = "name") String name,
+    public ResponseEntity<ClientDTO> addClient(@RequestParam(name = "name") String name,
                                           @RequestParam(name = "lastName") String lastName,
                                           @RequestParam(name = "description") String description) {
 
-        final Client client = new Client(name, lastName, description);
-        clientServiceImpl.addClient(client);
-        return new ResponseEntity<>(client, HttpStatus.CREATED);
+        ClientDTO clientDTO = ClientDTO.builder()
+                .name(name)
+                .lastName(lastName)
+                .description(description)
+                .build();
 
+        clientService.addClient(clientDTO);
+        return new ResponseEntity<>(clientDTO, HttpStatus.CREATED);
     }
 
     @RequestMapping(value="/client/{id}",method= RequestMethod.GET)
     public ResponseEntity<Client> getClient(@PathVariable int id) {
 
-        Client client =  clientServiceImpl.getClient(id);
+        Client client =  clientService.getClient(id);
         return new ResponseEntity<>(client, HttpStatus.FOUND);
 
     }
@@ -42,20 +49,20 @@ public class ClientController {
     @RequestMapping(value="/clients",method= RequestMethod.GET)
     public ResponseEntity<List<Client>>  getAllClients() {
 
-        List<Client> li = clientServiceImpl.getAllClients();
+        List<Client> li = clientService.getAllClients();
         return new ResponseEntity<>(li,HttpStatus.FOUND);
 
     }
 
     @RequestMapping(value="/client", method = RequestMethod.PUT)
     public ResponseEntity<Client> updateClient(@RequestBody Client client) {
-        clientServiceImpl.updateClient(client);
+        clientService.updateClient(client);
         return new ResponseEntity<>(client,HttpStatus.OK);
     }
 
     @RequestMapping(value="/client/{id}",method=RequestMethod.DELETE)
     public ResponseEntity<Integer> deleteClient(@PathVariable int id) {
-        clientServiceImpl.deleteClient(id);
+        clientService.deleteClient(id);
         return new ResponseEntity<>(id,HttpStatus.FOUND);
     }
 

@@ -21,15 +21,5 @@ public class Item {
     private int id;
     private String name;
 
-<<<<<<< HEAD
-    @ManyToOne
-    @JoinColumn(name="SHOPPING_ORDER_ID")
-    private ShoppingOrder shoppingOrder;
-=======
-    @OneToOne
-    private ShoppingOrder shoppingOrder;
 
-
-
->>>>>>> a79fd91506e4ab4e94c9ee68fad557592b1df6a2
 }

@@ -31,9 +31,13 @@ public class PaymentServiceImpl implements PaymentService {
 
         int orderId = paymentDTO.getOrderId();
         float amount = paymentDTO.getAmount();
+        int clientId = paymentDTO.getClientId();
+
 
         ShoppingOrder shoppingOrder = orderRepository.findOne(orderId);
         Payment payment = new Payment(amount,shoppingOrder);
+
+        clientRepository.findOne(clientId).getPayments().add(payment);
 
         paymentRepository.save(payment);
     }
@@ -52,7 +56,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     public List<Payment> getAllPaymentsFromClient(int clientId) {
 
-       return clientRepository.findOne(clientId).getPayment();
+       return clientRepository.findOne(clientId).getPayments();
 
     }
 

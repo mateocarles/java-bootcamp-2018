@@ -1,4 +1,5 @@
 package com.globant.shoppingcartdemoapp.service.impl;
+import com.globant.shoppingcartdemoapp.dto.ClientDTO;
 import com.globant.shoppingcartdemoapp.entities.*;
 import java.util.*;
 
@@ -18,7 +19,17 @@ public class ClientServiceImpl implements ClientService {
     }
 
 
-    public void addClient(Client client) {
+    public void addClient(ClientDTO clientDTO) {
+
+        String name = clientDTO.getName();
+        String lastName = clientDTO.getLastName();
+        String description = clientDTO.getDescription();
+
+        Client client = Client.builder()
+                .name(name)
+                .lastName(lastName)
+                .description(description)
+                .build();
 
         clientRepository.save(client);
     }
