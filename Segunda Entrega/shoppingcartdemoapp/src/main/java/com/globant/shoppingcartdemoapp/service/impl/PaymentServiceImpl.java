@@ -77,6 +77,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     public void deletePayment(int id) {
+
         paymentRepository.delete(id);
     }
 }

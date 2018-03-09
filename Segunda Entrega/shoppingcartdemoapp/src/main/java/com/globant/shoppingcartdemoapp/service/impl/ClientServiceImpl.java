@@ -19,7 +19,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
 
-    public void addClient(ClientDTO clientDTO) {
+    public Client addClient(ClientDTO clientDTO) {
 
         String name = clientDTO.getName();
         String lastName = clientDTO.getLastName();
@@ -31,7 +31,7 @@ public class ClientServiceImpl implements ClientService {
                 .description(description)
                 .build();
 
-        clientRepository.save(client);
+      return  clientRepository.save(client);
     }
 
     public List<Client> getAllClients() {
