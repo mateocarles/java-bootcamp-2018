@@ -1,6 +1,7 @@
 package ItemServiceImplTest;
 
 
+import com.globant.shoppingcartdemoapp.dto.ItemDTO;
 import com.globant.shoppingcartdemoapp.entities.Item;
 import com.globant.shoppingcartdemoapp.repository.ItemRepository;
 import com.globant.shoppingcartdemoapp.service.ItemService;
@@ -28,10 +29,10 @@ public class ItemServiceImplTest {
 
     @Test
     public void addItemTest() {
-        Item item = new Item();
+        ItemDTO item = new ItemDTO();
         when(itemRepositoryMock.save(any(Item.class))).thenReturn(any(Item.class));
         itemService.addItem(item);
-        verify(itemRepositoryMock,times(1)).save(item);
+        verify(itemRepositoryMock,times(1)).save(any(Item.class));
     }
 
     @Test
@@ -43,11 +44,10 @@ public class ItemServiceImplTest {
 
     @Test
     public void updateItemTest() {
-        Item item = new Item();
+        ItemDTO item = new ItemDTO();
         when(itemRepositoryMock.save(any(Item.class))).thenReturn(any(Item.class));
         itemService.updateItem(item);
         verify(itemRepositoryMock,times(1)).save(any(Item.class));
-
     }
 
     @Test

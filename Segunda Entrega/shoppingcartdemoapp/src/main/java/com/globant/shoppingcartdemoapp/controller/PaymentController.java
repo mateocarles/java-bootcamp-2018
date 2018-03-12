@@ -8,16 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
-
-
 @RestController
 @RequestMapping(value="/payment")
 public class PaymentController {
 
     private final PaymentService paymentService;
-
 
     @Autowired
     public PaymentController(PaymentService paymentService) {
@@ -28,13 +23,11 @@ public class PaymentController {
     public ResponseEntity<PaymentDTO> addPayment(@RequestParam(name = "clientId") int clientId,
                                                  @RequestParam(name = "orderId") int orderId,
                                                @RequestParam(name = "amount") float amount) {
-
         PaymentDTO paymentDTO = PaymentDTO.builder()
                 .orderId(orderId)
                 .amount(amount)
                 .clientId(clientId)
                 .build();
-
         paymentService.add(paymentDTO);
         return new ResponseEntity<>(paymentDTO, HttpStatus.CREATED);
     }
@@ -61,7 +54,6 @@ public class PaymentController {
     public ResponseEntity<PaymentDTO> updatePayment(@RequestParam(name ="paymentId") int paymentId,
                                                     @RequestParam(name = "orderId") int orderId,
                                                     @RequestParam(name = "amount") float amount) {
-
         PaymentDTO paymentDTO = PaymentDTO.builder()
                 .paymentId(paymentId)
                 .orderId(orderId)
@@ -73,8 +65,6 @@ public class PaymentController {
 
     @RequestMapping(value="/delete",method = RequestMethod.DELETE)
     public void deletePayment(@RequestParam(name = "paymentId") int paymentId) {
-
         paymentService.deletePayment(paymentId);
     }
-
 }

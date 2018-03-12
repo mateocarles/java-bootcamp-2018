@@ -31,10 +31,7 @@ public class ClientDAO {
 
         ConnectionJDBC.close(stmt);
         ConnectionJDBC.close(conn);
-
-
         return rows;
-
     }
 
     public int update(ClientDTO client) throws SQLException {
@@ -57,10 +54,7 @@ public class ClientDAO {
 
         ConnectionJDBC.close(stmt);
         ConnectionJDBC.close(conn);
-
-
         return rows;
-
     }
 
     public int delete(ClientDTO client) throws SQLException {
@@ -81,10 +75,7 @@ public class ClientDAO {
 
         ConnectionJDBC.close(stmt);
         ConnectionJDBC.close(conn);
-
-
         return rows;
-
     }
 
     public ClientDTO select(int id) throws SQLException {
@@ -94,10 +85,8 @@ public class ClientDAO {
         int rows = 0;
 
         PreparedStatement stmt = conn.prepareStatement(SQL_SELECT);
-
-
-
         int index = 1;
+
         stmt.setInt(index, id);
 
         rs = stmt.executeQuery();
@@ -134,8 +123,6 @@ public class ClientDAO {
 
         PreparedStatement stmt = conn.prepareStatement(SQL_SELECTALL);
         ResultSet rs = stmt.executeQuery();
-
-
         while (rs.next()) {
 
             int idClient = rs.getInt(1);
@@ -149,13 +136,9 @@ public class ClientDAO {
             clients.add(cli);
 
         }
-
         ConnectionJDBC.close(rs);
         ConnectionJDBC.close(stmt);
         ConnectionJDBC.close(conn);
-
-
         return clients;
-
     }
 }

@@ -1,7 +1,5 @@
 package com.globant.shoppingcartdemoapp.controller;
 import com.globant.shoppingcartdemoapp.dto.ClientDTO;
-import com.globant.shoppingcartdemoapp.dto.PaymentDTO;
-import com.globant.shoppingcartdemoapp.entities.Payment;
 import com.globant.shoppingcartdemoapp.service.ClientService;
 import com.globant.shoppingcartdemoapp.service.impl.ClientServiceImpl;
 import com.globant.shoppingcartdemoapp.entities.Client;
@@ -42,7 +40,7 @@ public class ClientController {
     public ResponseEntity<Client> getClient(@PathVariable int id) {
 
         Client client =  clientService.getClient(id);
-        return new ResponseEntity<>(client, HttpStatus.FOUND);
+        return new ResponseEntity<>(client, HttpStatus.OK);
 
     }
 

@@ -14,8 +14,6 @@ public class ConnectionJDBC {
     String pass = "admin";
 
     public static synchronized Connection getConnection() throws SQLException {
-
-
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (Exception e){
@@ -27,8 +25,6 @@ public class ConnectionJDBC {
         Connection con =  DriverManager.getConnection(JDBC_URL,JDBC_USER,JDBC_PASS);
 
         return con;
-
-
     }
 
     public static void close(ResultSet rs) {
@@ -40,10 +36,7 @@ public class ConnectionJDBC {
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
-
-
     }
-
     public static void close(PreparedStatement stmt) {
         try {
             if (stmt != null) {
@@ -53,7 +46,6 @@ public class ConnectionJDBC {
             sqle.printStackTrace();
         }
     }
-
     public static void close(Connection conn) {
         try {
             if (conn != null) {
@@ -63,8 +55,4 @@ public class ConnectionJDBC {
             sqle.printStackTrace();
         }
     }
-
-
-
-
 }

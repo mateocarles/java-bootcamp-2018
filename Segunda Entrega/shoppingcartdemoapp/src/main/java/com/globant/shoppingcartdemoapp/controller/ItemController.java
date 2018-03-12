@@ -1,5 +1,6 @@
 package com.globant.shoppingcartdemoapp.controller;
 
+import com.globant.shoppingcartdemoapp.dto.ItemDTO;
 import com.globant.shoppingcartdemoapp.entities.*;
 import com.globant.shoppingcartdemoapp.service.ItemService;
 import com.globant.shoppingcartdemoapp.service.impl.ItemServiceImpl;
@@ -20,11 +21,10 @@ public class ItemController {
     }
 
     @RequestMapping(value="/item", method = RequestMethod.POST)
-    public ResponseEntity<Item> addItem(@RequestBody Item item) {
-
-        Item it = itemService.addItem(item);
-        return new ResponseEntity<>(it,HttpStatus.CREATED);
-
+    public ResponseEntity<ItemDTO> addItem(@RequestParam(name="name") String name) {
+        ItemDTO itemDto = new ItemDTO(name);
+        itemService.addItem(itemDto);
+        return new ResponseEntity<>(itemDto,HttpStatus.CREATED);
     }
 
     @RequestMapping(value="/item/{itemId}", method = RequestMethod.GET)
@@ -35,15 +35,14 @@ public class ItemController {
     }
 
     @RequestMapping(value="/item",method = RequestMethod.PUT)
-    public ResponseEntity<Item> updateItem(@RequestBody Item item) {
-        itemService.updateItem(item);
-        return new ResponseEntity<>(item, HttpStatus.FOUND);
+    public ResponseEntity<ItemDTO> updateItem(@RequestParam(name="name") String name) {
+        ItemDTO itemDTO = new ItemDTO(name);
+        itemService.updateItem(itemDTO);
+        return new ResponseEntity<>(itemDTO, HttpStatus.FOUND);
     }
 
     @RequestMapping(value="/item/{itemId}",method = RequestMethod.DELETE)
     public void deleteItem(@PathVariable int itemId) {
         itemService.deleteItem(itemId);
     }
-
-
 }

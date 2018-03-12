@@ -16,8 +16,6 @@ import java.util.*;
 @AllArgsConstructor
 @Table(name="CLIENT")
 public class Client {
-
-
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private int id;
@@ -25,8 +23,7 @@ public class Client {
     private String lastName;
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)//
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "client_payment"),name = "PAYMENT_ID")
     private List<Payment> payments;
-
-
 }

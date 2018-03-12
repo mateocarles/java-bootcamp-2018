@@ -2,13 +2,7 @@ package com.controller;
 
 
 import com.model.*;
-
-
-
 import java.util.*;
-
-
-
 
 public class Operations {
 
@@ -40,10 +34,6 @@ public class Operations {
             e.printStackTrace();
 
         }
-
-
-
-
     }
 
     public static void selectClient() throws Exception {
@@ -63,13 +53,9 @@ public class Operations {
         sc.nextLine();
 
         for(int i = 0 ; i < clients.size() ; i++) {
-
             if(id == clients.get(i).getID()) {
-
                 selectedClient = clients.get(i);
-
             }
-
         }
 
         if(selectedClient != null) {
@@ -123,10 +109,8 @@ public class Operations {
     }
 
     public static void deleteClient(ClientDTO client) throws Exception {
-
         cliDao.delete(client);
         System.out.println("You successfully deleted the client...");
-
     }
 
     public static void updateClient(ClientDTO client) throws Exception{
@@ -146,9 +130,6 @@ public class Operations {
         int rows = cliDao.update(client);
 
         System.out.println("You successfully updated client ! "+rows+ " has been modified");
-
-
-
     }
 
     public static void makeNewOrder(ClientDTO client) throws Exception{
@@ -160,21 +141,14 @@ public class Operations {
         ShoppingCartOrder order = new ShoppingCartOrder();
 
         Item selectedItem = null;
-
-
         int menuop = 0;
-
         do {
-
-
             for (int i = 0; i < items.size(); i++) {
 
                 System.out.println("\nID: " + items.get(i).getId());
                 System.out.println("Name: " + items.get(i).getName());
                 System.out.println("Price: " + items.get(i).getPrice());
-
             }
-
             System.out.println("Select Item by ID: ");
             int id = sc.nextInt();
             sc.nextLine();
@@ -185,17 +159,12 @@ public class Operations {
                     selectedItem = items.get(i);
                 }
             }
-
-
             //add item to arraylist of order
-
             if(selectedItem != null) {
 
                 order.getItemList().add(selectedItem);
                 order.setAmount(order.getAmount()+selectedItem.getPrice());
-
             }
-
             System.out.println("Do you want to add more items? \n 1.YES\n2.NO");
             int o = sc.nextInt();
             sc.nextLine();
@@ -204,24 +173,12 @@ public class Operations {
                 menuop = 1;
             }
 
-
         }while(menuop!=1);
-
         int idPayment = PaymentDAO.insertPayment(order.getAmount(),client.getID());
-
         //add for every item
         for(int i = 0 ; i < items.size() ; i++) {
 
             OrderDAO.insertPaymentDetails(idPayment,items.get(i).getId());
-
         }
-
-
-
-
-
-
-
     }
-
 }

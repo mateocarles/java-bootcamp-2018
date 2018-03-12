@@ -19,15 +19,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name="SHOPPING_ORDER")
 public class ShoppingOrder {
-
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
 
-
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(foreignKey = @ForeignKey(name = "shoppingorder_item"), name = "ITEM_ID")
     private List<Item> items;
-
-
-
 }

@@ -37,7 +37,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     public ShoppingOrder getOrder(int orderId) {
-        return orderRepository.findOne(orderId);
+        return orderRepository.getOne(orderId);
     }
 
     public void updateOrder(OrderDTO orderDTO, int orderId) {
